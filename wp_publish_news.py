@@ -120,8 +120,8 @@ def publish_to_wordpress(title, intro, body):
         "title": title,
         "content": f"{intro}<br>{body}",
         "status": "publish",
-        "categories": [153],
-        # "categories": [9],
+        # "categories": [153], # This category ID is for experimenting with the plugin (publishes to wp-playground/*)
+        "categories": [9],
         "type": "post",
         "comment_status": "open",
         "ping_status": "open",
