@@ -5,6 +5,7 @@ import re
 import requests
 from requests.auth import HTTPBasicAuth
 import tempfile
+import base64
 
 
 def fetch_html(url):
@@ -113,15 +114,20 @@ def publish_to_wordpress(title, intro, body):
     """
     wp_url = "https://envirologic.se/wp-json/wp/v2/posts"
 
-    username = "elin"
-    app_password = "eigo E9w0 m766 mDa1 ivgp tXC7"
+    username = os.environ.get("WP_USERNAME")
+    encoded_password = os.environ.get("WP_APP_PASSWORD")
+    if not username or not encoded_password:
+        raise RuntimeError("WordPress credentials not set in environment variables.")
+    app_password = base64.b64decode(encoded_password).decode("utf-8")
 
     data = {
         "title": title,
         "content": f"{intro}<br>{body}",
         "status": "publish",
-        # "categories": [153], # This category ID is for experimenting with the plugin (publishes to wp-playground/*)
-        "categories": [9],
+        "categories": [
+            153
+        ],  # This category ID is for experimenting with the plugin (publishes to wp-playground/*)
+        # "categories": [9],
         "type": "post",
         "comment_status": "open",
         "ping_status": "open",
